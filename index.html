@@ -1,114 +1,265 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>🇹🇼 台灣房市簡史 1949-2026</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇹🇼</text></svg>">
-<meta name="description" content="台灣房市簡史 1949-2026 速查互動網。">
-<link rel="stylesheet" href="style.css">
-<style>
-    /* 確保靜態版的基礎排版正確 */
-    .app-container { max-width: 800px; margin: 0 auto; padding: 20px; }
-    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 15px; position: sticky; top: 0; z-index: 100; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .btn { background: var(--brand); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; margin-bottom: 10px;}
-    .stats-board { background: var(--surface-2); padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; color: var(--brand); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🇹🇼 台灣房市簡史 1949-2026</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇹🇼</text></svg>">
+    <meta name="description" content="台灣房市簡史 1949-2026 速查互動網。包含房價時光機、歷史大事記與DIY挑戰，秒懂台灣房地產發展脈絡！">
+    <meta name="keywords" content="台灣房市,房價指數,房市歷史,房地產,買房,住宅週報,歐巴柴,房價時光機">
+    <meta name="author" content="歐巴柴">
+    
+    <link rel="stylesheet" href="theme.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
 
 <header class="header">
-  <div class="container" style="display: flex; align-items: center; gap: 10px; max-width: 800px; margin: 0 auto;">
-    <div class="brand" style="display: flex; align-items: center; gap: 8px;">
-      <span class="brand-icon" style="font-size: 24px;">🇹🇼</span>
-      <div style="display: flex; flex-direction: column;">
-        <h1 style="margin: 0; font-size: 18px; color: var(--brand);">台灣房市簡史</h1>
-        <div class="subtitle" style="font-size: 12px; color: var(--text-muted);">1949-2026 歷史軌跡與房價時光機</div>
-      </div>
+    <div class="header-container" style="max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px;">
+        <div class="brand" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <span style="font-size: 26px;">🇹🇼</span>
+            <div style="display: flex; flex-direction: column;">
+                <h1 style="margin: 0; font-size: 18px; letter-spacing: 1px;">台灣房市簡史</h1>
+                <span style="font-size: 10px; opacity: 0.7;">1949-2026 歷史軌跡速查</span>
+            </div>
+        </div>
+        <nav style="display: flex; gap: 15px; font-size: 14px;">
+            <a href="javascript:void(0)" onclick="scrollToSec('timemachine')" style="color: inherit; text-decoration: none;">時光機</a>
+            <a href="javascript:void(0)" onclick="scrollToSec('matrix')" style="color: inherit; text-decoration: none;">趨勢圖</a>
+            <a href="javascript:void(0)" onclick="scrollToSec('quiz')" style="color: inherit; text-decoration: none;">DIY測驗</a>
+        </nav>
     </div>
-  </div>
 </header>
 
-<main class="app-container">
-    <div class="stats-board">
-        🔥 連勝紀錄: <span id="streakCount">0</span>
-    </div>
+<main style="max-width: 900px; margin: 0 auto; padding: 20px 15px;">
 
-    <div class="card" id="eventCard">
-        <h2 id="eventTitle" style="color: var(--brand); margin-top: 0;">載入中...</h2>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 14px;">
-            <span id="eventPresident" style="background: var(--surface-2); padding: 4px 8px; border-radius: 4px;">👤</span>
-            <span id="eventParty" style="background: var(--surface-2); padding: 4px 8px; border-radius: 4px;">🏛️</span>
+    <section id="timemachine" class="card" style="margin-bottom: 30px;">
+        <h2 style="margin-top: 0; display: flex; align-items: center; gap: 8px;">🚀 房價時光機 <span style="font-size: 14px; font-weight: normal; color: var(--text-secondary);" onclick="showPropertyInfo()">ⓘ</span></h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <div class="form-group">
+                <label style="display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-secondary);">選擇縣市</label>
+                <select id="citySelect" style="width: 100%; height: 40px;">
+                    <option value="全國">全國</option>
+                    <option value="台北市">台北市</option>
+                    <option value="新北市">新北市</option>
+                    <option value="桃園市">桃園市</option>
+                    <option value="新竹縣市">新竹縣市</option>
+                    <option value="台中市">台中市</option>
+                    <option value="台南市">台南市</option>
+                    <option value="高雄市">高雄市</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-secondary);">物件類型</label>
+                <select id="typeSelect" style="width: 100%; height: 40px;">
+                    <option value="cathay">預售屋 (國泰指數)</option>
+                    <option value="moi">成屋/中古 (內政部指數)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-secondary);">買入年份</label>
+                <select id="startYear" style="width: 100%; height: 40px;"></select>
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-secondary);">賣出年份</label>
+                <select id="endYear" style="width: 100%; height: 40px;"></select>
+            </div>
         </div>
-        <p id="eventDesc" style="font-size: 16px; font-weight: 500;"></p>
-        <div id="eventDetail" style="font-size: 14px; color: var(--text-secondary); margin-top: 15px; whiteSpace: pre-line;"></div>
-    </div>
 
-    <div id="quizSection">
-        <button class="btn" onclick="handleAnswer(true)">這是一個正確的歷史決策 (測試按鈕)</button>
-        <button class="btn" style="background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border);" onclick="handleAnswer(false)">這是一個錯誤的歷史決策 (測試按鈕)</button>
-    </div>
-    
-    <div id="feedback" style="margin-top: 15px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; display: none;"></div>
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-secondary);">當時買入總價 (萬元)</label>
+            <input type="number" id="buyPrice" value="1000" style="width: 100%; height: 40px; box-sizing: border-box; padding: 0 10px;">
+        </div>
+
+        <button class="btn-primary" onclick="calculateROI()" style="width: 100%;">開始試算時光價值</button>
+        
+        <div id="result-display" style="margin-top: 25px; min-height: 50px; display: none; padding: 20px; border-radius: 12px; background: var(--surface-2);">
+            </div>
+    </section>
+
+    <section id="matrix" class="card" style="margin-bottom: 30px;">
+        <h2 style="margin-top: 0;">📊 房市矩陣趨勢圖</h2>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">數據包含：國泰新屋指數、信義/內政部中古屋指數、房貸負擔率與所得比。</p>
+        <div id="chart-container" style="width: 100%; height: 450px;"></div>
+    </section>
+
+    <section id="quiz" class="card" style="margin-bottom: 30px;">
+        <h2 style="margin-top: 0;">🧩 房市歷史 DIY 挑戰</h2>
+        <div style="background: var(--surface-2); padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 14px; font-weight: bold;">🔥 當前連勝紀錄：<span id="streakCount" style="color: var(--primary-color);">0</span></span>
+            <span style="font-size: 12px; opacity: 0.6;">挑戰您的歷史敏銳度</span>
+        </div>
+        
+        <div id="quiz-area">
+            <div id="q-card" style="padding: 20px; border: 1px dashed var(--border-color); border-radius: 12px; margin-bottom: 20px;">
+                <h3 id="q-title" style="margin: 0 0 10px 0; color: var(--primary-color);">載入中...</h3>
+                <div id="q-meta" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;"></div>
+                <p id="q-desc" style="font-size: 16px; margin: 0; line-height: 1.5;"></p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="btn-quiz" onclick="handleAnswer(true)" style="background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">✅ 正確歷史</button>
+                <button class="btn-quiz" onclick="handleAnswer(false)" style="background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">❌ 錯誤歷史</button>
+            </div>
+            
+            <div id="feedback" style="margin-top: 15px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; display: none;"></div>
+        </div>
+    </section>
+
 </main>
 
-<footer class="master-footer">
-    <p class="footer-copyright">版權所有©2026住宅週報,規劃設計:歐巴柴 | Copyright © 2026 HouseWeek, Design & Planning by Obachai</p>
+<footer class="master-footer" style="padding: 40px 20px; text-align: center; opacity: 0.8;">
+    <div style="max-width: 900px; margin: 0 auto; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <p style="margin: 0; font-size: 13px;">版權所有©2026住宅週報,規劃設計:歐巴柴 | Copyright © 2026 HouseWeek, Design & Planning by Obachai</p>
+        <p style="margin: 8px 0 0 0; font-size: 11px;">數據來源：內政部地政司、國泰房地產指數、信義不動產評論</p>
+    </div>
 </footer>
 
+<div id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;">
+    <div class="card" style="max-width: 500px; width:100%; position:relative; padding:30px;">
+        <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:24px;" onclick="document.getElementById('info-modal').style.display='none'">&times;</span>
+        <div id="modal-inner-content"></div>
+    </div>
+</div>
+
 <script src="data.js"></script>
+<script src="index-refers.js"></script>
+
 <script>
-    // 降級回純原生 JavaScript 邏輯
-    let currentData = null;
-    let correctStreak = localStorage.getItem('house_master_streak') ? parseInt(localStorage.getItem('house_master_streak')) : 0;
+let currentQuiz = null;
+let correctStreak = 0;
+
+// 初始化年份選單
+function initDropdowns() {
+    const start = document.getElementById('startYear');
+    const end = document.getElementById('endYear');
+    const years = Object.keys(marketData).sort();
+    
+    years.forEach(y => {
+        const opt1 = new Option(y, y);
+        const opt2 = new Option(y, y);
+        start.add(opt1);
+        end.add(opt2);
+    });
+    
+    // 預設選取
+    start.value = "2000 Q1";
+    end.value = "2024 Q1";
+}
+
+// 試算邏輯
+function calculateROI() {
+    const city = document.getElementById('citySelect').value;
+    const type = document.getElementById('typeSelect').value;
+    const buyYQ = document.getElementById('startYear').value;
+    const sellYQ = document.getElementById('endYear').value;
+    const buyPrice = parseFloat(document.getElementById('buyPrice').value);
+    
+    const display = document.getElementById('result-display');
+    display.style.display = 'block';
+    
+    // 呼叫 index-refers.js 中的運算 (假設存在於該檔案)
+    // 註：若運算邏輯在 index-refers.js 中，這裡直接引用
+    if (typeof getCityIndex === 'undefined') {
+        display.innerHTML = "系統錯誤：計算引擎未載入。";
+        return;
+    }
+
+    // 模擬計算過程 (實際應對應 index-refers.js 邏輯)
+    const buyIdx = getCityIndex(buyYQ, city, type);
+    const sellIdx = getCityIndex(sellYQ, city, type);
+
+    if (!buyIdx || !sellIdx) {
+        display.innerHTML = "⚠️ 該時間段或區域資料不足，無法估算。";
+        return;
+    }
+
+    const ratio = sellIdx / buyIdx;
+    const currentVal = Math.round(buyPrice * ratio);
+    const gain = currentVal - buyPrice;
+    const gainPct = ((ratio - 1) * 100).toFixed(1);
+
+    display.innerHTML = `
+        <div style="text-align:center;">
+            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:10px;">估算時光價值結果</div>
+            <div style="font-size:28px; font-weight:bold; color:var(--primary-color);">${currentVal} 萬元</div>
+            <div style="margin-top:10px; font-size:16px;">
+                獲利：<span style="color:var(--success-color)">+${gain} 萬</span> 
+                (<span style="color:var(--success-color)">${gainPct}%</span>)
+            </div>
+            <div style="font-size:12px; margin-top:15px; opacity:0.6;">* 此為根據官方指數之歷史軌跡換算，不代表實際市場成交價。</div>
+        </div>
+    `;
+}
+
+// DIY 測驗邏輯
+function generateQuiz() {
+    if (!data || data.length === 0) return;
+    const idx = Math.floor(Math.random() * data.length);
+    currentQuiz = data[idx];
+    
+    document.getElementById('q-title').innerText = currentQuiz.year + " - " + currentQuiz.event;
+    document.getElementById('q-meta').innerText = "👤 " + currentQuiz.president + " | 🏛️ " + currentQuiz.party;
+    document.getElementById('q-desc').innerText = currentQuiz.desc;
+    
+    const feedback = document.getElementById('feedback');
+    feedback.style.display = 'none';
+}
+
+function handleAnswer(userChoice) {
+    const feedback = document.getElementById('feedback');
+    feedback.style.display = 'block';
+    
+    // 此遊戲邏輯設定：題目顯示的皆為真實歷史，故 userChoice 為 true 則答對
+    if (userChoice === true) {
+        feedback.innerText = "✅ 答對了！您對歷史脈絡非常清楚。";
+        feedback.style.background = "var(--success-bg, rgba(32, 212, 137, 0.1))";
+        feedback.style.color = "var(--success-color)";
+        correctStreak++;
+    } else {
+        feedback.innerText = "❌ 答錯了！這確實是真實發生的房市歷史。";
+        feedback.style.background = "var(--danger-bg, rgba(241, 65, 108, 0.1))";
+        feedback.style.color = "var(--danger-color)";
+        correctStreak = 0;
+    }
     
     document.getElementById('streakCount').innerText = correctStreak;
+    setTimeout(generateQuiz, 2000);
+}
 
-    function init() {
-        if (typeof data !== 'undefined' && data.length > 0) {
-            generateQuiz();
-        } else {
-            document.getElementById('eventTitle').innerText = "資料載入失敗，請確認 data.js 是否存在。";
-        }
-    }
+function showPropertyInfo() {
+    const modal = document.getElementById('info-modal');
+    const inner = document.getElementById('modal-inner-content');
+    modal.style.display = 'flex';
+    inner.innerHTML = `
+        <h3 style="color:var(--primary-color); margin-top:0;">💡 指數說明</h3>
+        <p style="font-size:14px; line-height:1.6;">
+            <b>【國泰房地產指數】</b>：反映「新屋/預售屋」市場動態，對房價起漲點具先導意義。<br><br>
+            <b>【內政部價格指數】</b>：反映「中古屋/成屋」市場動態，代表廣大自住市場的真實成本波動。
+        </p>
+    `;
+}
 
-    function generateQuiz() {
-        const nextIdx = Math.floor(Math.random() * data.length);
-        currentData = data[nextIdx];
-        
-        document.getElementById('eventTitle').innerText = currentData.year + " - " + currentData.event;
-        document.getElementById('eventPresident').innerText = "👤 " + currentData.president;
-        document.getElementById('eventParty').innerText = "🏛️ " + currentData.party;
-        document.getElementById('eventDesc').innerText = currentData.desc;
-        document.getElementById('eventDetail').innerText = currentData.detail;
-        
-        document.getElementById('feedback').style.display = 'none';
-    }
+function scrollToSec(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
 
-    function handleAnswer(isCorrect) {
-        const feedback = document.getElementById('feedback');
-        feedback.style.display = 'block';
-        
-        if (isCorrect) {
-            feedback.style.backgroundColor = '#dcfce7';
-            feedback.style.color = '#15803d';
-            feedback.innerText = '✅ 答對了！';
-            correctStreak++;
-        } else {
-            feedback.style.backgroundColor = '#fee2e2';
-            feedback.style.color = '#b91c1c';
-            feedback.innerText = '❌ 答錯了！';
-            correctStreak = 0;
-        }
-        
-        document.getElementById('streakCount').innerText = correctStreak;
-        localStorage.setItem('house_master_streak', correctStreak);
-        
-        setTimeout(() => { generateQuiz(); }, isCorrect ? 1000 : 2500);
-    }
-
-    document.addEventListener("DOMContentLoaded", init);
+// 初始化
+document.addEventListener("DOMContentLoaded", () => {
+    initDropdowns();
+    generateQuiz();
+    
+    // 點擊 Modal 外部關閉
+    document.getElementById('info-modal').addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = 'none';
+    });
+});
 </script>
+
+<script src="echart.js" defer></script>
+
 </body>
 </html>
