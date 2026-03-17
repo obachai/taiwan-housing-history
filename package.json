@@ -1,0 +1,17 @@
+{
+  "name": "taiwan-real-estate-history",
+  "version": "2.0.0",
+  "description": "台灣房市簡史 1949-2026 - SPA 重構版",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.0.0",
+    "astro": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
