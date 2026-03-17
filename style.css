@@ -1,0 +1,70 @@
+/* style.css - 網頁大師 Phase 1 升級版 (Taiwan Edition) */
+:root {
+    /* 核心品牌色：台灣專屬經典紅 */
+    --brand: #B91C1C; 
+    --brand-soft: rgba(185, 28, 28, 0.08);
+    --primary-dark: #7F1D1D;
+    
+    /* 表面與背景 */
+    --bg: #F6F8FB;
+    --surface: #FFFFFF;
+    --surface-2: #F1F5F9;
+    
+    /* 文字系統 */
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-muted: #6B7280;
+    
+    /* 邊界與狀態 */
+    --border: #E5E7EB;
+    --divider: #E2E8F0;
+    --success: #15803D;
+    --danger: #B91C1C;
+    --warning: #B45309;
+    --info: #1D4ED8;
+    
+    /* 相容舊有變數對照 */
+    --primary: var(--brand);
+    --accent: var(--brand-soft);
+    --text: var(--text-primary);
+    --text-light: var(--text-muted);
+    --card: var(--surface);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; 
+    line-height: 1.6; 
+    background: var(--bg); 
+    color: var(--text-primary);
+    margin: 0; 
+    padding-bottom: 80px; /* 預留底部版權宣告空間，防止內容被遮蔽 */
+}
+
+/* 確保原有卡片、按鈕等樣式相容 (繼承您的原始設定) */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
+.btn { background: var(--brand); color: #fff; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; }
+.btn:hover { background: var(--primary-dark); }
+
+/* --- 網頁大師強制植入：標準版權宣告區塊 --- */
+.master-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 12px 15px;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+.master-footer .footer-copyright {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin: 0;
+    font-weight: 500;
+}
