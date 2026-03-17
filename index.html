@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>🇹🇼 台灣房市簡史 1949-2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇹🇼</text></svg>">
+<meta name="description" content="台灣房市簡史 1949-2026 速查互動網。">
+<link rel="stylesheet" href="style.css">
+<style>
+    /* 確保靜態版的基礎排版正確 */
+    .app-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 15px; position: sticky; top: 0; z-index: 100; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .btn { background: var(--brand); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; margin-bottom: 10px;}
+    .stats-board { background: var(--surface-2); padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; color: var(--brand); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container" style="display: flex; align-items: center; gap: 10px; max-width: 800px; margin: 0 auto;">
+    <div class="brand" style="display: flex; align-items: center; gap: 8px;">
+      <span class="brand-icon" style="font-size: 24px;">🇹🇼</span>
+      <div style="display: flex; flex-direction: column;">
+        <h1 style="margin: 0; font-size: 18px; color: var(--brand);">台灣房市簡史</h1>
+        <div class="subtitle" style="font-size: 12px; color: var(--text-muted);">1949-2026 歷史軌跡與房價時光機</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="app-container">
+    <div class="stats-board">
+        🔥 連勝紀錄: <span id="streakCount">0</span>
+    </div>
+
+    <div class="card" id="eventCard">
+        <h2 id="eventTitle" style="color: var(--brand); margin-top: 0;">載入中...</h2>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 14px;">
+            <span id="eventPresident" style="background: var(--surface-2); padding: 4px 8px; border-radius: 4px;">👤</span>
+            <span id="eventParty" style="background: var(--surface-2); padding: 4px 8px; border-radius: 4px;">🏛️</span>
+        </div>
+        <p id="eventDesc" style="font-size: 16px; font-weight: 500;"></p>
+        <div id="eventDetail" style="font-size: 14px; color: var(--text-secondary); margin-top: 15px; whiteSpace: pre-line;"></div>
+    </div>
+
+    <div id="quizSection">
+        <button class="btn" onclick="handleAnswer(true)">這是一個正確的歷史決策 (測試按鈕)</button>
+        <button class="btn" style="background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border);" onclick="handleAnswer(false)">這是一個錯誤的歷史決策 (測試按鈕)</button>
+    </div>
+    
+    <div id="feedback" style="margin-top: 15px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; display: none;"></div>
+</main>
+
+<footer class="master-footer">
+    <p class="footer-copyright">版權所有©2026住宅週報,規劃設計:歐巴柴 | Copyright © 2026 HouseWeek, Design & Planning by Obachai</p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+    // 降級回純原生 JavaScript 邏輯
+    let currentData = null;
+    let correctStreak = localStorage.getItem('house_master_streak') ? parseInt(localStorage.getItem('house_master_streak')) : 0;
+    
+    document.getElementById('streakCount').innerText = correctStreak;
+
+    function init() {
+        if (typeof data !== 'undefined' && data.length > 0) {
+            generateQuiz();
+        } else {
+            document.getElementById('eventTitle').innerText = "資料載入失敗，請確認 data.js 是否存在。";
+        }
+    }
+
+    function generateQuiz() {
+        const nextIdx = Math.floor(Math.random() * data.length);
+        currentData = data[nextIdx];
+        
+        document.getElementById('eventTitle').innerText = currentData.year + " - " + currentData.event;
+        document.getElementById('eventPresident').innerText = "👤 " + currentData.president;
+        document.getElementById('eventParty').innerText = "🏛️ " + currentData.party;
+        document.getElementById('eventDesc').innerText = currentData.desc;
+        document.getElementById('eventDetail').innerText = currentData.detail;
+        
+        document.getElementById('feedback').style.display = 'none';
+    }
+
+    function handleAnswer(isCorrect) {
+        const feedback = document.getElementById('feedback');
+        feedback.style.display = 'block';
+        
+        if (isCorrect) {
+            feedback.style.backgroundColor = '#dcfce7';
+            feedback.style.color = '#15803d';
+            feedback.innerText = '✅ 答對了！';
+            correctStreak++;
+        } else {
+            feedback.style.backgroundColor = '#fee2e2';
+            feedback.style.color = '#b91c1c';
+            feedback.innerText = '❌ 答錯了！';
+            correctStreak = 0;
+        }
+        
+        document.getElementById('streakCount').innerText = correctStreak;
+        localStorage.setItem('house_master_streak', correctStreak);
+        
+        setTimeout(() => { generateQuiz(); }, isCorrect ? 1000 : 2500);
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
